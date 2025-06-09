@@ -14,50 +14,95 @@ public class GestionPadrinosDonantes {
     
     private static final String URL = "jdbc:postgresql://localhost:5432/proyectoBD";
     private static final String USUARIO = "postgres";
-    private static final String CONTRA = "1234";
-
-    //Ver luego el tema de la contraseña
+    //Cambiar contraseña si es necesario
+    private static final String CONTRA = "1234";    
+    
 
     public static void main(String[] args){
 
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e){
-            System.out.println("No se pudo cargar el driver");
-            return;
-        }
-
-        //Empieza el programa
-        Scanner sc = new Scanner(System.in);
-        int opcion = 0;
-
-        try(Connection con = DriverManager.getConnection(URL, USUARIO, CONTRA)) {
-            do {
-                System.out.println("\n--- Menu ---");
-                System.out.println("1. Insertar padrino");
-                System.out.println("2. Eliminar donante");
-                System.out.println("3. Listar padrinos y aportes");
-                System.out.println("4. Salir");
-                System.out.print("Elija opcion: ");
-                opcion = sc.nextInt();
-                sc.nextLine();
-
-                switch(opcion) {
-                    case 1 -> insertarPadrino(con, sc);
-                    case 2 -> eliminarDonante(con, sc);
-                    case 3 -> listarPadrinos(con);
-                    case 4 -> System.out.println("Saliendo...");
-                    default -> System.out.println("Opcion invalida");
-                }
-            } while (opcion != 4);
-        }catch (SQLException e) {
-            System.out.println("Error de BD: " + e.getMessage());
-        }
-        sc.close();
+    try {
+        Class.forName("org.postgresql.Driver");
+    } catch (ClassNotFoundException e){
+        System.out.println("No se pudo cargar el driver");
+        return;
     }
 
+    Scanner sc = new Scanner(System.in);
+    int opcion = 0;
+
+    try(Connection con = DriverManager.getConnection(URL, USUARIO, CONTRA)) {
+        do {
+            System.out.println("\n--- Menu ---");
+            System.out.println("1. Insertar padrino");
+            System.out.println("2. Eliminar donante");
+            System.out.println("3. Listar padrinos y aportes");
+            System.out.println("4. Salir");
+            System.out.print("Elija opcion: ");
+            opcion = sc.nextInt();
+            sc.nextLine();
+
+            if (opcion == 1) {
+                insertarPadrino(con, sc);
+            } else if (opcion == 2) {
+                eliminarDonante(con, sc);
+            } else if (opcion == 3) {
+                listarPadrinos(con);
+            } else if (opcion == 4) {
+                System.out.println("Saliendo...");
+            } else {
+                System.out.println("Opcion invalida");
+            }
+
+        } while (opcion != 4);
+    
+    } catch (SQLException e) {
+        System.out.println("Error de BD: " + e.getMessage());
+    }
+    sc.close();
+}
+
     private static void insertarPadrino(Connection con, Scanner sc) {
-        //Falta hacer
+        try {
+
+            String query  = "INSERT INTO ciudad_de_los_ninos.Padrino(dni, nombre_apellido, direccion, email, facebook_user, cod_postal, fecha_nac)" +
+                            "VALUES (?,?,?,?,?,?,?)";
+            System.out.println("Ingrese el dni del padrino: ");
+            String dni = sc.nextLine();
+            System.out.println("Ingrese el nombre y apellido del padrino: ");
+            String nombreApellido = sc.nextLine();
+            System.out.println("Ingrese el direccion del padrino: ");
+            String direccion = sc.nextLine();
+            System.out.println("Ingrese el email del padrino: ");
+            String email = sc.nextLine();
+            System.out.println("Ingrese el usuario de facebook del padrino: ");
+            String userFacebook = sc.nextLine();
+            System.out.println("Ingrese el codigo postal del padrino: ");
+            int postal = Integer.parseInt(sc.nextLine());
+            System.out.print("Ingrese la fecha de nacimiento del padrino (yyyy-mm-dd): ");
+            String fechaNac = sc.nextLine();
+            java.sql.Date fechaSQL = java.sql.Date.valueOf(fechaNac);
+            
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, dni);
+            statement.setString(2, nombreApellido);
+            statement.setString(3, direccion);
+            statement.setString(4, email);
+            statement.setString(5, userFacebook);
+            statement.setInt(6, postal);
+            statement.setDate(7, fechaSQL);
+
+            int filasInsertadas = statement.executeUpdate();
+            if(filasInsertadas > 0){
+                System.out.println("Padrino insertado correctamente.");
+            }
+
+            statement.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error al insertar el padrino: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Fecha invalida. Debe tener el formato yyyy-mm-dd");
+        }
     }
 
     private static void eliminarDonante(Connection con, Scanner sc) {
@@ -66,8 +111,8 @@ public class GestionPadrinosDonantes {
             
             System.out.print("Ingrese el DNI del donante a eliminar: ");
             String dni = sc.nextLine();
-            String sql = "DELETE FROM ciudad_de_los_ninos.Donante WHERE dni = ?";
-            PreparedStatement statement = con.prepareStatement(sql);
+            String query = "DELETE FROM ciudad_de_los_ninos.Donante WHERE dni = ?";
+            PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, dni);
             int rowsAffected = statement.executeUpdate();
 
@@ -94,7 +139,6 @@ public class GestionPadrinosDonantes {
             PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
-            //Envio la consulta a la base de datos y guardo los resultados
             System.out.println();
             System.out.println("Listado de padrinos con sus aportes");
             System.out.println("-----------------------------------");
@@ -102,7 +146,7 @@ public class GestionPadrinosDonantes {
                 System.out.println("DNI: " + resultSet.getString(1));
                 System.out.println("Nombre y Apellido: " + resultSet.getString(2));
                 System.out.println("Programa: " + resultSet.getString(3));
-                System.out.println("Monto: $" + resultSet.getBigDecimal(4));  // para mostrar bien decimal
+                System.out.println("Monto: $" + resultSet.getBigDecimal(4)); 
                 System.out.println("Frecuencia: " + resultSet.getString(5));
                 System.out.println("----------------------------------");
             }
