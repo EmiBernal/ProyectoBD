@@ -1,9 +1,0 @@
-//Para las actividades 5 y 6 (GestionPadrinosDonantes.java es un ej)
-
-En la misma carpeta donde esta la carpeta jdbc, ejecutar este comando para compilar:
-
- - javac -cp ".;jdbc/postgresql-42.7.5.jar" GestionPadrinosDonantes.java
-
-Luego de compilar, ejecutar este comando:
-
- - java -cp ".;jdbc/postgresql-42.7.5.jar" GestionPadrinosDonantes

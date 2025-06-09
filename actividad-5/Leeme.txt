@@ -1,0 +1,32 @@
+Proyecto Gestión de Padrinos y Donantes - Configuración y Ejecución
+
+Este proyecto utiliza un archivo llamado config.properties para establecer la conexión a la base de datos PostgreSQL.
+
+1. Ubicación del archivo config.properties:
+   - Debe estar ubicado en la misma carpeta donde se ejecuta el programa (junto al archivo .class o .jar).
+
+2. Contenido del archivo config.properties:
+   
+   db.url=jdbc:postgresql://localhost:5432/proyectoBD
+   db.user=postgres
+   db.password=SU_CONTRASEÑA
+
+   Reemplace "SU_CONTRASEÑA" con la contraseña que utiliza para acceder a PostgreSQL o la que tenga configurada en pgAdmin.
+
+3. Compilación y ejecución:
+
+   - Para Windows, en la consola use:
+
+     javac -cp ".;jdbc/postgresql-42.7.5.jar" Actividad5.java (Compilar)
+
+     java -cp ".;jdbc/postgresql-42.7.5.jar" Actividad5 (Ejecutar)
+
+   - Para Linux/Ubuntu, en la consola use:
+
+     javac -cp ".:jdbc/postgresql-42.7.5.jar" Actividad5.java (Compilar)
+
+     java -cp ".:jdbc/postgresql-42.7.5.jar" Actividad5 (Ejecutar)
+
+
+Disfrute de la experiencia!
+Atte: Manuel Barbieri, Emiliano Bernal, Leonardo Campos

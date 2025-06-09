@@ -1,65 +1,73 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.Properties;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * <p>Title: Trabajo práctico integrador - </p>
  * <p>Description: Ejercicio 5</p>
- * <p>Copyright: Copyright (c) 2003</p>
  * <p>Company: Universidad Nacional De Rio Cuarto</p>
- * @author Manuel Barbieri, Leonardo Campos, Emiliano Bernal
+ * @author 
  * @version 1.0
  */
-
-public class GestionPadrinosDonantes {
-    
-    private static final String URL = "jdbc:postgresql://localhost:5432/proyectoBD";
-    private static final String USUARIO = "postgres";
-    //Cambiar contraseña si es necesario
-    private static final String CONTRA = "1234";    
-    
+public class Actividad5 {
 
     public static void main(String[] args){
 
-    try {
-        Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e){
-        System.out.println("No se pudo cargar el driver");
-        return;
+        Properties props = new Properties();
+        String url = "";
+        String user = "";
+        String password = "";
+
+        try {
+            // Carga el archivo de propiedades
+            props.load(new FileInputStream("config.properties"));
+            url = props.getProperty("db.url");
+            user = props.getProperty("db.user");
+            password = props.getProperty("db.password");
+
+            // Carga el driver
+            Class.forName("org.postgresql.Driver");
+
+        } catch (IOException e) {
+            System.out.println("No se pudo leer config.properties: " + e.getMessage());
+            return;
+        } catch (ClassNotFoundException e){
+            System.out.println("No se pudo cargar el driver PostgreSQL");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        int opcion = 0;
+
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            do {
+                System.out.println("\n--- Menu ---");
+                System.out.println("1. Insertar padrino");
+                System.out.println("2. Eliminar donante");
+                System.out.println("3. Listar padrinos y aportes");
+                System.out.println("4. Salir");
+                System.out.print("Elija opcion: ");
+                opcion = sc.nextInt();
+                sc.nextLine();
+
+                switch (opcion) {
+                    case 1 -> insertarPadrino(con, sc);
+                    case 2 -> eliminarDonante(con, sc);
+                    case 3 -> listarPadrinos(con);
+                    case 4 -> System.out.println("Saliendo...");
+                    default -> System.out.println("Opcion invalida");
+                }
+
+            } while (opcion != 4);
+
+        } catch (SQLException e) {
+            System.out.println("Error de BD: " + e.getMessage());
+        }
+
+        sc.close();
     }
-
-    Scanner sc = new Scanner(System.in);
-    int opcion = 0;
-
-    try(Connection con = DriverManager.getConnection(URL, USUARIO, CONTRA)) {
-        do {
-            System.out.println("\n--- Menu ---");
-            System.out.println("1. Insertar padrino");
-            System.out.println("2. Eliminar donante");
-            System.out.println("3. Listar padrinos y aportes");
-            System.out.println("4. Salir");
-            System.out.print("Elija opcion: ");
-            opcion = sc.nextInt();
-            sc.nextLine();
-
-            if (opcion == 1) {
-                insertarPadrino(con, sc);
-            } else if (opcion == 2) {
-                eliminarDonante(con, sc);
-            } else if (opcion == 3) {
-                listarPadrinos(con);
-            } else if (opcion == 4) {
-                System.out.println("Saliendo...");
-            } else {
-                System.out.println("Opcion invalida");
-            }
-
-        } while (opcion != 4);
-    
-    } catch (SQLException e) {
-        System.out.println("Error de BD: " + e.getMessage());
-    }
-    sc.close();
-}
 
     private static void insertarPadrino(Connection con, Scanner sc) {
         try {
@@ -157,7 +165,6 @@ public class GestionPadrinosDonantes {
             System.out.println("Error al lista padrinos: " + e.getMessage());
         }
     }
-
 
 
 }
