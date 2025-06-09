@@ -1,1 +1,0 @@
-java -classpath ".;mysql-connector-java-8.0.20.jar" EjemploResultSetMySQL
