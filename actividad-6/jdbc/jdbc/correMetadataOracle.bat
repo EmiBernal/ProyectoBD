@@ -1,0 +1,1 @@
+java -classpath ".;ojdbc14.jar" EjemploMetadataOracle
