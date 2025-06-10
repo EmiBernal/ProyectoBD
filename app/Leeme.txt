@@ -15,20 +15,8 @@ IMPORTANTE: Reemplace "SU_CONTRASEÑA" con la contraseña que utiliza para acced
 
 3. Compilación y ejecución:
 
-En la misma carpeta donde esta el archivo java, haga click derecho en algún lugar de la carpeta y escoja la opción Open in Terminal o Abrir en Terminal
+En la misma carpeta donde esta el archivo java, se encuentra un archivo .bat (para ejecutar en windows) y un archivo .sh (para ejecutar en Linux/mac). 
 
-Luego, siga estos pasos dependiendo de su software:
-
-   - Para Windows, en la consola use:
-
-     javac -cp ".;jdbc/postgresql-42.7.5.jar" app.java 
-
-     java -cp ".;jdbc/postgresql-42.7.5.jar" app 
-
-   - Para Linux/Ubuntu/Mac, en la consola use:
-
-     javac -cp ".:jdbc/postgresql-42.7.5.jar" app.java 
-
-     java -cp ".:jdbc/postgresql-42.7.5.jar" app 
+Haga doble click en el archivo que le corresponda a su software
 
 Atte: Manuel Barbieri, Emiliano Bernal, Leonardo Campos

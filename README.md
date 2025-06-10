@@ -21,7 +21,7 @@ Instrucciones de uso
 
     Ingresar a la carpeta db y ejecutar los scripts para crear y poblar la base de datos.
 
-    Luego, ingresar a la carpeta app para compilar y ejecutar la aplicación.
+    Luego, ingresar a la carpeta app para modificar el archivo config.properties con sus datos y poder ejecutar el programa.
     Allí se incluyen instrucciones adicionales si fueran necesarias.
 
 Integrantes
