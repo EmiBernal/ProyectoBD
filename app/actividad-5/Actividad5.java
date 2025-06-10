@@ -70,48 +70,70 @@ public class Actividad5 {
     }
 
     private static void insertarPadrino(Connection con, Scanner sc) {
-        try {
+    try {
+        System.out.println("Ingrese el dni del padrino: ");
+        String dni = sc.nextLine();
 
-            String query  = "INSERT INTO ciudad_de_los_ninos.Padrino(dni, nombre_apellido, direccion, email, facebook_user, cod_postal, fecha_nac)" +
-                            "VALUES (?,?,?,?,?,?,?)";
-            System.out.println("Ingrese el dni del padrino: ");
-            String dni = sc.nextLine();
-            System.out.println("Ingrese el nombre y apellido del padrino: ");
-            String nombreApellido = sc.nextLine();
-            System.out.println("Ingrese el direccion del padrino: ");
-            String direccion = sc.nextLine();
-            System.out.println("Ingrese el email del padrino: ");
-            String email = sc.nextLine();
-            System.out.println("Ingrese el usuario de facebook del padrino: ");
-            String userFacebook = sc.nextLine();
-            System.out.println("Ingrese el codigo postal del padrino: ");
-            int postal = Integer.parseInt(sc.nextLine());
-            System.out.print("Ingrese la fecha de nacimiento del padrino (yyyy-mm-dd): ");
-            String fechaNac = sc.nextLine();
-            java.sql.Date fechaSQL = java.sql.Date.valueOf(fechaNac);
-            
-            PreparedStatement statement = con.prepareStatement(query);
-            statement.setString(1, dni);
-            statement.setString(2, nombreApellido);
-            statement.setString(3, direccion);
-            statement.setString(4, email);
-            statement.setString(5, userFacebook);
-            statement.setInt(6, postal);
-            statement.setDate(7, fechaSQL);
+        // Verificar si el DNI ya existe
+        String checkQuery = "SELECT 1 FROM ciudad_de_los_ninos.Padrino WHERE dni = ?";
+        PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+        checkStmt.setString(1, dni);
+        ResultSet rs = checkStmt.executeQuery();
 
-            int filasInsertadas = statement.executeUpdate();
-            if(filasInsertadas > 0){
-                System.out.println("Padrino insertado correctamente.");
-            }
-
-            statement.close();
-
-        } catch (SQLException e) {
-            System.out.println("Error al insertar el padrino: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println("Fecha invalida. Debe tener el formato yyyy-mm-dd");
+        if (rs.next()) {
+            System.out.println("Error: El padrino con DNI " + dni + " ya está registrado.");
+            rs.close();
+            checkStmt.close();
+            return; 
         }
+        rs.close();
+        checkStmt.close();
+
+        // Si no existe, continuar con la inserción
+        String insertQuery = "INSERT INTO ciudad_de_los_ninos.Padrino(dni, nombre_apellido, direccion, email, facebook_user, cod_postal, fecha_nac)" +
+                             "VALUES (?,?,?,?,?,?,?)";
+        PreparedStatement insertStmt = con.prepareStatement(insertQuery);
+        insertStmt.setString(1, dni);
+
+        System.out.println("Ingrese el nombre y apellido del padrino: ");
+        String nombreApellido = sc.nextLine();
+        insertStmt.setString(2, nombreApellido);
+
+        System.out.println("Ingrese la direccion del padrino: ");
+        String direccion = sc.nextLine();
+        insertStmt.setString(3, direccion);
+
+        System.out.println("Ingrese el email del padrino: ");
+        String email = sc.nextLine();
+        insertStmt.setString(4, email);
+
+        System.out.println("Ingrese el usuario de facebook del padrino: ");
+        String userFacebook = sc.nextLine();
+        insertStmt.setString(5, userFacebook);
+
+        System.out.println("Ingrese el codigo postal del padrino: ");
+        int postal = Integer.parseInt(sc.nextLine());
+        insertStmt.setInt(6, postal);
+
+        System.out.print("Ingrese la fecha de nacimiento del padrino (yyyy-mm-dd): ");
+        String fechaNac = sc.nextLine();
+        java.sql.Date fechaSQL = java.sql.Date.valueOf(fechaNac);
+        insertStmt.setDate(7, fechaSQL);
+
+        int filasInsertadas = insertStmt.executeUpdate();
+        if(filasInsertadas > 0){
+            System.out.println("Padrino insertado correctamente.");
+        }
+
+        insertStmt.close();
+
+    } catch (SQLException e) {
+        System.out.println("Error al insertar el padrino: " + e.getMessage());
+    } catch (IllegalArgumentException e) {
+        System.out.println("Fecha invalida. Debe tener el formato yyyy-mm-dd");
     }
+}
+
 
     private static void eliminarDonante(Connection con, Scanner sc) {
        

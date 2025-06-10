@@ -9,7 +9,7 @@ En este repositorio se encontraran los resultados de las actividades del proyect
 	
 Integrantes:
 	
-	 Leonardo cesar campos pedraza
+	 Leonardo cesar campos pedraza ()
 	 Manuel Barbieri
-	 Emiliano Bernal
-	
+	 Emiliano Bernal (emiibernal1275@gmail.com)
+	 
