@@ -50,28 +50,33 @@ public class app {
                 System.out.println("2. Eliminar donante");
                 System.out.println("3. Listar padrinos y aportes");
                 System.out.println("4. Total de aportes mensuales por programa");
-                System.out.println("5. Donantes que aportan a mas de dos programas");
+                System.out.println("5. Donantes que aportan a más de dos programas");
                 System.out.println("6. Listar donantes con aportes mensuales y datos de medios de pago");
                 System.out.println("7. Salir");
                 System.out.print("Elija opcion: ");
                 opcion = sc.nextInt();
                 sc.nextLine();
 
-                switch (opcion) {
-                    case 1 -> insertarPadrino(con, sc);
-                    case 2 -> eliminarDonante(con, sc);
-                    case 3 -> listarPadrinos(con);
-                    case 4 -> {
-                        List<String[]> lista = totalAportesMensuales(con);
-                        System.out.println();
-                        for (String[] fila : lista) {
-                            System.out.println("Programa: " + fila[0] + ", Total Mensual: " + fila[1]);
-                        }
+                if (opcion == 1) {
+                    insertarPadrino(con, sc);
+                } else if (opcion == 2) {
+                    eliminarDonante(con, sc);
+                } else if (opcion == 3) {
+                    listarPadrinos(con);
+                } else if (opcion == 4) {
+                    List<String[]> lista = totalAportesMensuales(con);
+                    System.out.println();
+                    for (String[] fila : lista) {
+                        System.out.println("Programa: " + fila[0] + ", Total Mensual: " + fila[1]);
                     }
-                    case 5 -> donantesAportanProgramas(con);
-                    case 6 -> ListadoDonantes(con);
-                    case 7 -> System.out.println("Saliendo..    . Muchas gracias!");
-                    default -> System.out.println("Opcion invalida");
+                } else if (opcion == 5) {
+                    donantesAportanProgramas(con);
+                } else if (opcion == 6) {
+                    ListadoDonantes(con);
+                } else if (opcion == 7) {
+                    System.out.println("Saliendo... Muchas gracias!");
+                } else {
+                    System.out.println("Opción inválida");
                 }
 
             } while (opcion != 7);
