@@ -15,8 +15,17 @@ IMPORTANTE: Reemplace "SU_CONTRASEÑA" con la contraseña que utiliza para acced
 
 3. Compilación y ejecución:
 
-En la misma carpeta donde esta el archivo java, se encuentra un archivo .bat (para ejecutar en windows) y un archivo .sh (para ejecutar en Linux/mac). 
+En la misma carpeta donde esta el archivo java, se encuentra un archivo .bat (para ejecutar en windows) y un archivo .sh (para ejecutar en Linux/macOs). 
 
-Haga doble click en el archivo que le corresponda a su software
+    En Windows: Haga doble clic en el archivo .bat para compilar y ejecutar automáticamente
+    
+    En Linux/macOs: No se puede ejecutar el archivo .sh con doble clic, ya que el sistema 
+abrirá el script en un editor de texto. Para ejecutar el script debe:
+	1) Abrir la Terminal
+	2) Navegar a la carpeta donde está el archivo .sh
+	3) Dar permisos de ejecución (solo la primera vez)
+		chmod +x nombre-del-archivo.sh
+	4) Ejecutar el script con: 
+		./nombre-del-archivo.sh
 
 Atte: Manuel Barbieri, Emiliano Bernal, Leonardo Campos

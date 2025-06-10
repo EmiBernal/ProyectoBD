@@ -1,14 +1,14 @@
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * <p>Title: Trabajo práctico integrador - </p>
- * <p>Description: Ejercicio 5</p>
+ * <p>Description: Ejercicio 5 y 6</p>
  * <p>Company: Universidad Nacional De Rio Cuarto</p>
  * @author 
  * @version 1.0
