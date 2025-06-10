@@ -1,0 +1,27 @@
+Instrucciones para la instalación de la base de datos
+
+Dentro de la carpeta db encontrarás tres archivos SQL necesarios para configurar la base de datos:
+
+    - crear_base.sql
+    - crear_schema.sql
+    - insert_data.sql
+
+Pasos para la instalación:
+
+1. Crear la base de datos
+   - Abre pgAdmin4.
+   - Crea la base de datos llamada proyectoBD (clic derecho en "Databases" > "Create" > "Database").
+   - Alternativamente, puedes ejecutar el contenido del archivo crear_base.sql en la herramienta de consultas (Query Tool) para crear la base de datos.
+
+2. Crear schema y tablas
+   - Con la base de datos proyectoBD seleccionada, abre el Query Tool.
+   - Ejecuta el contenido del archivo crear_schema.sql para crear el esquema, tablas, relaciones, triggers y auditorías.
+
+3. Insertar los datos
+   - Con la base de datos proyectoBD aún seleccionada, abre el Query Tool.
+   - Ejecuta el contenido del archivo insert_data.sql para cargar los datos iniciales.
+
+Nota importante:
+Puedes copiar y pegar directamente el código de cada archivo en el Query Tool de pgAdmin4. Asegúrate de seguir el orden indicado (crear_base.sql, luego crear_schema.sql, y por último insert_data.sql) para evitar errores.
+
+¡Listo! La base de datos estará configurada y lista para usarse.

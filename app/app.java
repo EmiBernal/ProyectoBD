@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,7 +13,7 @@ import java.io.IOException;
  * @author 
  * @version 1.0
  */
-public class Actividad5 {
+public class app {
 
     public static void main(String[] args){
 
@@ -47,7 +49,10 @@ public class Actividad5 {
                 System.out.println("1. Insertar padrino");
                 System.out.println("2. Eliminar donante");
                 System.out.println("3. Listar padrinos y aportes");
-                System.out.println("4. Salir");
+                System.out.println("4. Total de aportes mensuales por programa");
+                System.out.println("5. Donantes que aportan a mas de dos programas");
+                System.out.println("6. Listar donantes con aportes mensuales y datos de medios de pago");
+                System.out.println("7. Salir");
                 System.out.print("Elija opcion: ");
                 opcion = sc.nextInt();
                 sc.nextLine();
@@ -56,11 +61,20 @@ public class Actividad5 {
                     case 1 -> insertarPadrino(con, sc);
                     case 2 -> eliminarDonante(con, sc);
                     case 3 -> listarPadrinos(con);
-                    case 4 -> System.out.println("Saliendo...");
+                    case 4 -> {
+                        List<String[]> lista = totalAportesMensuales(con);
+                        System.out.println();
+                        for (String[] fila : lista) {
+                            System.out.println("Programa: " + fila[0] + ", Total Mensual: " + fila[1]);
+                        }
+                    }
+                    case 5 -> donantesAportanProgramas(con);
+                    case 6 -> ListadoDonantes(con);
+                    case 7 -> System.out.println("Saliendo..    . Muchas gracias!");
                     default -> System.out.println("Opcion invalida");
                 }
 
-            } while (opcion != 4);
+            } while (opcion != 7);
 
         } catch (SQLException e) {
             System.out.println("Error de BD: " + e.getMessage());
@@ -188,5 +202,107 @@ public class Actividad5 {
         }
     }
 
+    private static List<String[]> totalAportesMensuales(Connection con){
+        List<String[]> resultados = new ArrayList<>();
+
+        String query = "SELECT nomProg, SUM(monto) AS total_mensual " +
+                       "FROM ciudad_de_los_ninos.Aporte " +
+                       "WHERE frecuencia = 'MENSUAL' " +
+                       "GROUP BY nomProg " +
+                       "ORDER BY nomProg";
+
+        try (PreparedStatement statement = con.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    String nomProg = resultSet.getString("nomProg");
+                    String totalMensual = resultSet.getString("total_mensual");
+                    resultados.add(new String[]{nomProg, totalMensual});
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return resultados;
+    }
+
+        private static void donantesAportanProgramas(Connection con) {
+            try {
+
+                String query = "select p.dni, p.nombre_apellido " +
+                        "from ciudad_de_los_ninos.Aporte a " +
+                        "join ciudad_de_los_ninos.Padrino p on a.dni = p.dni " +
+                        "group by p.dni, p.nombre_apellido " +
+                        "having count (distinct a.nomProg) > 2";
+
+                PreparedStatement statement = con.prepareStatement(query);
+                ResultSet resultSet = statement.executeQuery();
+
+                System.out.println();
+                System.out.println("Donantes que aportan a mas de dos programas");
+                System.out.println("-----------------------------------");
+                while(resultSet.next()) {
+                    System.out.println("DNI: " + resultSet.getString(1));
+                    System.out.println("Nombre y Apellido: " + resultSet.getString(2));
+                    System.out.println("----------------------------------");
+                }
+
+                resultSet.close();
+                statement.close();
+            } catch (SQLException e){
+                System.out.println("Error al listar los donantes: " + e.getMessage());
+            }
+        }
+
+        private static void ListadoDonantes(Connection con) {
+        try {
+            String query = "SELECT d.dni, p.nombre_apellido, d.cuit_cuil, d.ocupacion, " +
+                        "a.nomProg AS programa_aporte, a.frecuencia, m.nombre_titular, " +
+                        "tc.id_medioPago AS tarjeta, dt.id_medioPago AS debito " +
+                        "FROM ciudad_de_los_ninos.Donante d " +
+                        "JOIN ciudad_de_los_ninos.Padrino p ON d.dni = p.dni " +
+                        "JOIN ciudad_de_los_ninos.Aporte a ON d.dni = a.dni " +
+                        "JOIN ciudad_de_los_ninos.MedioPago m ON a.id_medioPago = m.id_medioPago " +
+                        "LEFT JOIN ciudad_de_los_ninos.TarjetaCredito tc ON m.id_medioPago = tc.id_medioPago " +
+                        "LEFT JOIN ciudad_de_los_ninos.DebitoTransferencia dt ON m.id_medioPago = dt.id_medioPago " +
+                        "WHERE a.frecuencia = 'MENSUAL'";
+
+            PreparedStatement statement = con.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            System.out.println();
+            System.out.println("Donantes con aportes mensuales:");
+            System.out.println("----------------------------------------------");
+
+            while (resultSet.next()) {
+                System.out.println("DNI: " + resultSet.getString("dni"));
+                System.out.println("Nombre y Apellido: " + resultSet.getString("nombre_apellido"));
+                System.out.println("CUIT/CUIL: " + resultSet.getString("cuit_cuil"));
+                System.out.println("Ocupación: " + resultSet.getString("ocupacion"));
+                System.out.println("Programa: " + resultSet.getString("programa_aporte"));
+                System.out.println("Frecuencia: " + resultSet.getString("frecuencia"));
+                System.out.println("Titular Medio de Pago: " + resultSet.getString("nombre_titular"));
+
+                String tarjeta = resultSet.getString("tarjeta");
+                String debito = resultSet.getString("debito");
+
+                if (tarjeta != null) {
+                    System.out.println("Tipo de Medio de Pago: Tarjeta de Crédito (ID " + tarjeta + ")");
+                } else if (debito != null) {
+                    System.out.println("Tipo de Medio de Pago: Débito/Transferencia (ID " + debito + ")");
+                } else {
+                    System.out.println("Tipo de Medio de Pago: Desconocido");
+                }
+
+                System.out.println("----------------------------------------------");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Error al listar los donantes: " + e.getMessage());
+        }
+    }
 
 }

@@ -113,4 +113,8 @@ VALUES
 ('10000007', 'Argentina Trabaja', 1300, 'QUINCENAL', 7),
 ('10000008', 'Conectar Igualdad', 1100, 'MENSUAL', 8),
 ('10000009', 'Apoyo Escolar', 950, 'TRIMESTRAL', 9),
-('10000010', 'Apoyo Escolar', 1700, 'MENSUAL', 10);
+('10000010', 'Apoyo Escolar', 1700, 'MENSUAL', 10),
+
+-- Agregados extra para que Ana Torres tenga más de 2 programas
+('10000001', 'Conectar Igualdad', 800, 'MENSUAL', 2),
+('10000001', 'AUH', 500, 'TRIMESTRAL', 3);

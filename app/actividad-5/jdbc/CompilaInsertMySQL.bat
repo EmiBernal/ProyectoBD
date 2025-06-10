@@ -1,1 +1,0 @@
-javac  InsertMySQL.java

@@ -1,15 +1,33 @@
-# ProyectoBD
-Repositorio oficial del trabajo práctico integrador de Base de Datos 2025
+ProyectoBD
 
-En este repositorio se encontraran los resultados de las actividades del proyecto:
+Repositorio oficial del Trabajo Práctico Integrador de Base de Datos 2025.
+Contenido del repositorio
 
-	Creacion de base de datos
-	Script con datos para la base de datos
-	Scripts en Java (programa entero y consultas por separado)
-	
-Integrantes:
-	
-	 Leonardo cesar campos pedraza ()
-	 Manuel Barbieri
-	 Emiliano Bernal (emiibernal1275@gmail.com)
-	 
+    Carpeta db:
+    Contiene los scripts SQL para:
+
+        Crear la base de datos.
+
+        Cargar datos iniciales.
+
+    Carpeta app:
+    Contiene:
+
+        El programa Java completo.
+
+        Las consultas correspondientes a los ejercicios 5 y 6.
+
+Instrucciones de uso
+
+    Ingresar a la carpeta db y ejecutar los scripts para crear y poblar la base de datos.
+
+    Luego, ingresar a la carpeta app para compilar y ejecutar la aplicación.
+    Allí se incluyen instrucciones adicionales si fueran necesarias.
+
+Integrantes
+
+    Leonardo César Campos Pedraza – leonardocampospedraza02@gmail.com
+
+    Manuel Barbieri – barbieripariani@gmail.com
+
+    Emiliano Bernal – emiibernal1275@gmail.com
